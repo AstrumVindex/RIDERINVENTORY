@@ -521,7 +521,12 @@ async function handleImageReplacement(e) {
             `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
             {
                 method: 'POST',
-                body: formData
+                mode: 'cors',
+                credentials: 'omit',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
             }
         );
 

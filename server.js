@@ -7,11 +7,27 @@ const helmet = require('helmet');
 
 const app = express();
 
-// Security middleware
-app.use(helmet());
+// Security middleware with custom CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "https://api.cloudinary.com"],
+      imgSrc: ["'self'", "https://res.cloudinary.com", "https://images.unsplash.com", "data:", "blob:"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "data:"],
+      upgradeInsecureRequests: []
+    }
+  }
+}));
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with specific origin
+app.use(cors({
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Enable compression
 app.use(compression());
