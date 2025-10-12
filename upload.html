@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Fitting Images - MotoFit Gallery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-motorcycle"></i>
+                    MotoFit Gallery
+                </div>
+                <div class="header-actions">
+                    <a href="index.html" class="gallery-link">
+                        <i class="fas fa-images"></i> View Gallery
+                    </a>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="upload-main">
+            <div class="upload-container">
+                <div class="upload-header">
+                    <h1>
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Upload  Fitting Images
+                    </h1>
+                    <p>Add new fitting images to your gallery</p>
+                </div>
+
+                <form id="uploadForm" class="upload-form">
+                    <div class="upload-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-upload"></i>
+                            <h3>Upload Image</h3>
+                        </div>
+                        
+                        <label for="fileInput" class="file-upload-label">
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h4>Drag & Drop your image here</h4>
+                                <p>or click to browse files</p>
+                                <p class="file-info" id="fileInfo">No file selected</p>
+                            </div>
+                        </label>
+                        
+                        <input type="file" id="fileInput" class="file-input" accept="image/*">
+                        
+                        <div class="image-preview" id="imagePreview">
+                            <img src="" alt="Preview">
+                            <button type="button" class="remove-preview" id="removePreview">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upload-card">
+                        <div class="card-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Product Information</h3>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="imageName">Product Name *</label>
+                                <input type="text" id="imageName" class="form-control" 
+                                       placeholder="e.g., Chrome Saddle Stay" required>
+                                <small>Give your product a descriptive name</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="imageCategory">Category *</label>
+                                <select id="imageCategory" class="form-control" required>
+                                    <option value="">Select a category</option>
+                                    <option value="saddle-stay">Saddle Stay</option>
+                                    <option value="crash-guard">Crash Guard</option>
+                                    <option value="carrier-rack">Carrier Rack</option>
+                                    <option value="exhaust">Exhaust</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="imageTags">Tags</label>
+                                <input type="text" id="imageTags" class="form-control" 
+                                       placeholder="e.g., chrome, saddle, motorcycle, custom">
+                                <small>Add relevant tags separated by commas for better searchability</small>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="imageDescription">Description</label>
+                                <textarea id="imageDescription" class="form-control" rows="4"
+                                          placeholder="Describe this motorcycle part in detail..."></textarea>
+                                <small>Include specifications, materials, or special features</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-actions">
+                        <button type="button" class="cancel-btn" onclick="window.location.href='index.html'">
+                            <i class="fas fa-arrow-left"></i> Back to Gallery
+                        </button>
+                        <button type="submit" class="upload-submit-btn" id="uploadBtn">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload
+                        </button>
+                    </div>
+                </form>
+
+                <div class="success-message" id="successMessage">
+                    <div class="success-content">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Upload Successful!</h3>
+                        <p>Your motorcycle Fitting image has been uploaded to gallery.</p>
+                        <div class="success-actions">
+                            <button class="view-gallery-btn" onclick="window.location.href='index.html'">
+                                <i class="fas fa-images"></i> View in Gallery
+                            </button>
+                            <button class="upload-another-btn" onclick="resetForm()">
+                                <i class="fas fa-plus"></i> Upload Another
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="upload.js"></script>
+</body>
+</html>

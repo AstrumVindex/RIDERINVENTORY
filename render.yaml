@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: riderinventory-web
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    healthCheckPath: "/.netlify/functions/gallery"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: CLOUDINARY_CLOUD_NAME
+        scope: env
+      - key: CLOUDINARY_API_KEY
+        scope: env
+      - key: CLOUDINARY_API_SECRET
+        scope: env
+    autoDeploy: true

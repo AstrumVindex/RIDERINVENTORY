@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Chrome Saddle Stay",
+    "tags": "saddle, stay, chrome, motorcycle, custom",
+    "category": "saddle-stay",
+    "description": "High-quality chrome plated saddle stay for classic motorcycles",
+    "url": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+  },
+  {
+    "id": 2,
+    "name": "Heavy Duty Crash Guard",
+    "tags": "crash, guard, protection, steel, heavy-duty",
+    "category": "crash-guard",
+    "description": "Robust steel crash guard for maximum motorcycle protection",
+  "url": "https://images.unsplash.com/photo-1558618666-fcd25856cd63?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+},
+{
+  "id": 1760278792615,
+    "name": "Classic  shotgun 650 soft pannier rail kechhi",
+    "tags": "Classic shotgun 650 soft pannier rail kechhi",
+    "category": "other",
+    "url": "https://res.cloudinary.com/dqkosqeke/image/upload/v1760278795/qjhzg5hitypciyocl1op.jpg",
+    "public_id": "qjhzg5hitypciyocl1op",
+    "description": "2 reborn nut with 2 small black washer",
+    "uploadedAt": "2025-10-12T14:19:52.615Z"
+  },
+  {
+    "id": 1760278646260,
+    "name": "Bear 650 saddle stay",
+    "tags": "",
+    "category": "saddle-stay",
+    "url": "https://res.cloudinary.com/dqkosqeke/image/upload/v1760278648/dsykhvf5ub4rib6mme1x.jpg",
+    "public_id": "dsykhvf5ub4rib6mme1x",
+    "description": "",
+    "uploadedAt": "2025-10-12T14:17:26.260Z"
+  }
+]
