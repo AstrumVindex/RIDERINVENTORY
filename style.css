@@ -348,8 +348,23 @@ header {
     opacity: 0;
 }
 
-.photo-card:hover .edit-btn {
+.photo-card:hover .edit-btn,
+.photo-card:active .edit-btn {
     opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .edit-btn {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.95);
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .edit-btn i {
+        font-size: 1.1rem;
+    }
 }
 
 .edit-btn:hover {

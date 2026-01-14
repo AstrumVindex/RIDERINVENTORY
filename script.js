@@ -167,7 +167,7 @@ function renderGallery() {
                     <i class="fas ${isSelected ? 'fa-check' : 'fa-times'}"></i>
                 </button>
             ` : ''}
-            <button class="edit-btn" onclick="event.stopPropagation(); openEditModal(${image.id})">
+            <button class="edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openEditModal(${image.id})">
                 <i class="fas fa-edit"></i>
             </button>
             <div class="protection-overlay"></div>
