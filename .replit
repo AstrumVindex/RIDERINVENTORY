@@ -9,16 +9,20 @@ channel = "stable-25_05"
 runButton = "Project"
 
 [[workflows.workflow]]
-name = "Project"
-mode = "parallel"
+name = "Run"
 author = "agent"
 
 [[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Start application"
+task = "shell.exec"
+args = "npm start"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [[workflows.workflow]]
-name = "Start application"
+name = "Run"
+mode = "parallel"
 author = "agent"
 
 [[workflows.workflow.tasks]]
