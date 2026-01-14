@@ -1,3 +1,9 @@
+// Global error handler to prevent app crashes
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    return false;
+};
+
 // Cloudinary configuration
 const cloudinaryConfig = {
     cloudName: 'dqkosqeke', // Replace with your cloud name
@@ -252,6 +258,7 @@ function loadThemePreference() {
 
 // Modal Functions
 function openModal(imageIndex) {
+    if (adminMode) return; // Prevent opening detail modal in admin mode
     currentImageIndex = imageIndex;
     currentFilteredImages = filteredImages;
 
@@ -556,6 +563,10 @@ async function handleImageReplacement(e) {
 
 // Admin Controls Functions
 function initAdminControls() {
+    if (!adminToggle) {
+        console.warn('adminToggle element not found, skipping admin controls initialization');
+        return;
+    }
     // Add event listener for admin toggle
     adminToggle.addEventListener('click', toggleAdminMode);
 }
