@@ -76,7 +76,7 @@
         <div class="edit-modal-content">
             <div class="edit-modal-header">
                 <h2><i class="fas fa-edit"></i> Edit Image</h2>
-                <button class="edit-close-btn" onclick="closeEditModal()">&times;</button>
+                <button class="edit-close-btn" id="editCloseBtn">&times;</button>
             </div>
             <div class="edit-modal-body">
                 <div class="edit-image-preview">
@@ -117,8 +117,8 @@
                     Images are protected from downloading and screenshots
                 </div>
                 <div class="edit-modal-actions">
-                    <button type="button" class="cancel-edit-btn" onclick="closeEditModal()">Cancel</button>
-                    <button type="button" class="save-edit-btn" onclick="saveEditChanges()">Save Changes</button>
+                    <button type="button" class="cancel-edit-btn" id="cancelEditBtn">Cancel</button>
+                    <button type="button" class="save-edit-btn" id="saveEditBtn">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -130,8 +130,8 @@
             <h3><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
             <p id="deleteModalMessage">Are you sure you want to delete these images? This action cannot be undone.</p>
             <div class="delete-modal-actions">
-                <button class="cancel-delete-btn" onclick="closeDeleteModal()">Cancel</button>
-                <button class="confirm-delete-btn" onclick="confirmDelete()">Delete</button>
+                <button class="cancel-delete-btn" id="cancelDeleteBtn">Cancel</button>
+                <button class="confirm-delete-btn" id="confirmDeleteBtn">Delete</button>
             </div>
         </div>
     </div>

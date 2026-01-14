@@ -163,11 +163,11 @@ function renderGallery() {
 
         photoCard.innerHTML = `
             ${adminMode ? `
-                <button class="image-delete-btn" onclick="event.stopPropagation(); toggleImageSelection(${image.id})">
+                <button class="image-delete-btn" data-image-id="${image.id}">
                     <i class="fas ${isSelected ? 'fa-check' : 'fa-times'}"></i>
                 </button>
             ` : ''}
-            <button class="edit-btn" onclick="event.stopPropagation(); openEditModal(${image.id})">
+            <button class="edit-btn" data-image-id="${image.id}">
                 <i class="fas fa-edit"></i>
             </button>
             <div class="protection-overlay"></div>
@@ -179,6 +179,24 @@ function renderGallery() {
                 ${adminMode ? `<div class="admin-info" style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">ID: ${image.id}</div>` : ''}
             </div>
         `;
+
+        // Add click event for edit button
+        const editBtn = photoCard.querySelector('.edit-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(image.id);
+            });
+        }
+
+        // Add click event for delete button (admin mode)
+        const deleteBtn = photoCard.querySelector('.image-delete-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleImageSelection(image.id);
+            });
+        }
 
         // Add click event to open modal (only if not in admin mode)
         if (!adminMode) {
@@ -410,8 +428,12 @@ function showProtectionWarning() {
 
 // Edit Functionality
 function openEditModal(imageId) {
+    console.log('Opening edit modal for image:', imageId);
     const image = images.find(img => img.id === imageId);
-    if (!image) return;
+    if (!image) {
+        console.error('Image not found with ID:', imageId);
+        return;
+    }
 
     currentEditImageId = imageId;
 
@@ -431,12 +453,20 @@ function openEditModal(imageId) {
     document.getElementById('editImageDescription').value = image.description || '';
 
     // Show the modal
-    document.getElementById('editModal').style.display = 'flex';
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+        editModal.style.display = 'flex';
+        console.log('Edit modal opened successfully');
+    } else {
+        console.error('Edit modal element not found');
+    }
     document.body.style.overflow = 'hidden';
 
     // Setup image replacement handler
     const editImageFile = document.getElementById('editImageFile');
-    editImageFile.value = ''; // Reset file input
+    if (editImageFile) {
+        editImageFile.value = ''; // Reset file input
+    }
 }
 
 function closeEditModal() {
@@ -823,11 +853,38 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
-// Add event listener for edit image file input
+// Add event listeners for edit modal buttons
 document.addEventListener('DOMContentLoaded', function () {
     const editImageFile = document.getElementById('editImageFile');
     if (editImageFile) {
         editImageFile.addEventListener('change', handleImageReplacement);
+    }
+
+    // Edit modal buttons
+    const editCloseBtn = document.getElementById('editCloseBtn');
+    if (editCloseBtn) {
+        editCloseBtn.addEventListener('click', closeEditModal);
+    }
+
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', closeEditModal);
+    }
+
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    if (saveEditBtn) {
+        saveEditBtn.addEventListener('click', saveEditChanges);
+    }
+
+    // Delete modal buttons
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    }
+
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', confirmDelete);
     }
 });
 
