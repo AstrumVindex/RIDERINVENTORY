@@ -86,7 +86,8 @@ async function initGallery() {
 
     // Load images from Netlify Function
     try {
-        const res = await fetch(GALLERY_API);
+        const cacheBreaker = `?t=${Date.now()}`; // Add timestamp to bust cache
+        const res = await fetch(GALLERY_API + cacheBreaker);
         if (!res.ok) throw new Error('Failed to fetch gallery data');
         images = await res.json();
         if (!Array.isArray(images)) images = [];
@@ -109,7 +110,8 @@ async function initGallery() {
 // Save images to Netlify Function
 async function saveToNetlifyGallery() {
     try {
-        const res = await fetch(GALLERY_API, {
+        const cacheBreaker = `?t=${Date.now()}`; // Add timestamp to bust cache
+        const res = await fetch(GALLERY_API + cacheBreaker, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(images)

@@ -42,19 +42,25 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static site from project root with caching
-app.use(express.static(path.join(__dirname), {
-  maxAge: '1d',
-  etag: true
-}));
-
 const galleryPath = path.join(__dirname, 'gallery.json');
 
-// Netlify-style function endpoint compatibility
+// Handle CORS preflight OPTIONS request for gallery endpoint
+app.options('/.netlify/functions/gallery', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.sendStatus(204);
+});
+
+// Netlify-style function endpoint compatibility - NO CACHING
 app.get('/.netlify/functions/gallery', (req, res) => {
   try {
     const data = fs.readFileSync(galleryPath, 'utf8');
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     return res.status(200).send(data);
   } catch (err) {
     console.error('Failed to read gallery.json:', err);
@@ -66,12 +72,27 @@ app.post('/.netlify/functions/gallery', (req, res) => {
   try {
     const body = req.body;
     fs.writeFileSync(galleryPath, JSON.stringify(body, null, 2));
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error('Failed to write gallery.json:', err);
     return res.status(500).json({ error: 'Failed to save gallery data.', details: err.message });
   }
 });
+
+// Serve static site from project root with caching (but NOT gallery.json)
+app.use(express.static(path.join(__dirname), {
+  maxAge: '1d',
+  etag: true,
+  setHeaders: (res, path) => {
+    // Don't cache gallery.json or other JSON files
+    if (path.endsWith('gallery.json') || path.endsWith('.json')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
 
 // Fallback for single-page app routes to serve index.html
 app.get('*', (req, res, next) => {

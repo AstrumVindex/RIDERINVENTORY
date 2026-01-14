@@ -167,11 +167,13 @@ async function handleFormSubmit(e) {
 
         if (!response.ok) {
             const errorText = await response.text();
+            console.error('Cloudinary error response:', response.status, errorText);
             throw new Error(`Upload failed: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();
         console.log('Cloudinary upload response:', data);
+        console.log('Image URL:', data.secure_url);
 
         // Create new image object with Cloudinary URL
         const newImage = {
@@ -209,8 +211,9 @@ const GALLERY_API = '/.netlify/functions/gallery';
 // Save image metadata to Netlify Function
 async function saveImageToGallery(newImage) {
     try {
+        const cacheBreaker = `?t=${Date.now()}`; // Add timestamp to bust cache
         // Get current gallery from Netlify
-        const res = await fetch(GALLERY_API);
+        const res = await fetch(GALLERY_API + cacheBreaker);
         let images = [];
         if (res.ok) {
             images = await res.json();
@@ -219,7 +222,7 @@ async function saveImageToGallery(newImage) {
         // Add new image to the beginning
         images.unshift(newImage);
         // Save back to Netlify
-        await fetch(GALLERY_API, {
+        await fetch(GALLERY_API + cacheBreaker, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(images)
