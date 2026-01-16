@@ -112,9 +112,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-const port = parseInt(process.env.PORT, 10) || 3000;
-const server = app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+const port = 5000;
+const host = '0.0.0.0';
+const server = app.listen(port, host, () => {
+  console.log(`Server started on ${host}:${port}`);
 });
 
 // Graceful shutdown

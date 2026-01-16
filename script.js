@@ -89,8 +89,13 @@ async function initGallery() {
         const cacheBreaker = `?t=${Date.now()}`; // Add timestamp to bust cache
         const res = await fetch(GALLERY_API + cacheBreaker);
         if (!res.ok) throw new Error('Failed to fetch gallery data');
-        images = await res.json();
-        if (!Array.isArray(images)) images = [];
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+            images = data;
+        } else {
+            console.log('API returned empty or invalid data, using defaults');
+            images = [...initialImages];
+        }
     } catch (err) {
         console.error('Error loading gallery from Netlify Function:', err);
         images = [...initialImages];
