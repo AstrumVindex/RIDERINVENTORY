@@ -1,9 +1,3 @@
-// Global error handler to prevent app crashes
-window.onerror = function(msg, url, lineNo, columnNo, error) {
-    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
-    return false;
-};
-
 // Cloudinary configuration
 const cloudinaryConfig = {
     cloudName: 'dqkosqeke', // Replace with your cloud name
@@ -52,7 +46,7 @@ const searchInput = document.getElementById('searchInput');
 const categoryFilters = document.getElementById('categoryFilters');
 const themeToggle = document.getElementById('themeToggle');
 const loadingState = document.getElementById('loadingState');
-const adminToggle = document.getElementById('adminToggle');
+const adminToggle = document.getElementById('adminToggle') || null; // Handle missing admin toggle
 
 // Modal Elements
 const modal = document.getElementById('imageModal');
@@ -169,14 +163,14 @@ function renderGallery() {
 
         photoCard.innerHTML = `
             ${adminMode ? `
-                <button class="image-delete-btn" onclick="event.stopPropagation(); toggleImageSelection(${image.id})">
+                <button class="image-delete-btn" data-image-id="${image.id}">
                     <i class="fas ${isSelected ? 'fa-check' : 'fa-times'}"></i>
                 </button>
             ` : ''}
-            <button class="edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openEditModal(${image.id})" style="z-index: 20;">
-                <i class="fas fa-edit" style="pointer-events: none;"></i>
+            <button class="edit-btn" data-image-id="${image.id}">
+                <i class="fas fa-edit"></i>
             </button>
-            <div class="protection-overlay" style="z-index: 1;"></div>
+            <div class="protection-overlay"></div>
             <img src="${image.url}" alt="${image.name}" class="photo-img protected-image" loading="lazy">
             <div class="photo-info">
                 <div class="photo-name">${image.name}</div>
@@ -185,6 +179,24 @@ function renderGallery() {
                 ${adminMode ? `<div class="admin-info" style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">ID: ${image.id}</div>` : ''}
             </div>
         `;
+
+        // Add click event for edit button
+        const editBtn = photoCard.querySelector('.edit-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openEditModal(image.id);
+            });
+        }
+
+        // Add click event for delete button (admin mode)
+        const deleteBtn = photoCard.querySelector('.image-delete-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleImageSelection(image.id);
+            });
+        }
 
         // Add click event to open modal (only if not in admin mode)
         if (!adminMode) {
@@ -258,7 +270,6 @@ function loadThemePreference() {
 
 // Modal Functions
 function openModal(imageIndex) {
-    if (adminMode) return; // Prevent opening detail modal in admin mode
     currentImageIndex = imageIndex;
     currentFilteredImages = filteredImages;
 
@@ -417,8 +428,12 @@ function showProtectionWarning() {
 
 // Edit Functionality
 function openEditModal(imageId) {
+    console.log('Opening edit modal for image:', imageId);
     const image = images.find(img => img.id === imageId);
-    if (!image) return;
+    if (!image) {
+        console.error('Image not found with ID:', imageId);
+        return;
+    }
 
     currentEditImageId = imageId;
 
@@ -438,12 +453,20 @@ function openEditModal(imageId) {
     document.getElementById('editImageDescription').value = image.description || '';
 
     // Show the modal
-    document.getElementById('editModal').style.display = 'flex';
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+        editModal.style.display = 'flex';
+        console.log('Edit modal opened successfully');
+    } else {
+        console.error('Edit modal element not found');
+    }
     document.body.style.overflow = 'hidden';
 
     // Setup image replacement handler
     const editImageFile = document.getElementById('editImageFile');
-    editImageFile.value = ''; // Reset file input
+    if (editImageFile) {
+        editImageFile.value = ''; // Reset file input
+    }
 }
 
 function closeEditModal() {
@@ -563,12 +586,10 @@ async function handleImageReplacement(e) {
 
 // Admin Controls Functions
 function initAdminControls() {
-    if (!adminToggle) {
-        console.warn('adminToggle element not found, skipping admin controls initialization');
-        return;
+    // Add event listener for admin toggle only if it exists
+    if (adminToggle) {
+        adminToggle.addEventListener('click', toggleAdminMode);
     }
-    // Add event listener for admin toggle
-    adminToggle.addEventListener('click', toggleAdminMode);
 }
 
 function toggleAdminMode() {
@@ -576,12 +597,20 @@ function toggleAdminMode() {
     const adminControls = document.getElementById('adminControls');
 
     if (adminMode) {
-        adminToggle.classList.add('admin-active');
-        adminControls.style.display = 'block';
+        if (adminToggle) {
+            adminToggle.classList.add('admin-active');
+        }
+        if (adminControls) {
+            adminControls.style.display = 'block';
+        }
         updateAdminStats();
     } else {
-        adminToggle.classList.remove('admin-active');
-        adminControls.style.display = 'none';
+        if (adminToggle) {
+            adminToggle.classList.remove('admin-active');
+        }
+        if (adminControls) {
+            adminControls.style.display = 'none';
+        }
         clearSelection();
     }
 
@@ -834,16 +863,40 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
-// Add event listener for edit image file input
+// Add event listeners for edit modal buttons
 document.addEventListener('DOMContentLoaded', function () {
     const editImageFile = document.getElementById('editImageFile');
     if (editImageFile) {
         editImageFile.addEventListener('change', handleImageReplacement);
     }
-});
 
-// (Debug panel removed) Raw gallery JSON debug panel and automatic updater removed so
-// the gallery JSON will no longer be appended to the page in production.
+    // Edit modal buttons
+    const editCloseBtn = document.getElementById('editCloseBtn');
+    if (editCloseBtn) {
+        editCloseBtn.addEventListener('click', closeEditModal);
+    }
+
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', closeEditModal);
+    }
+
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    if (saveEditBtn) {
+        saveEditBtn.addEventListener('click', saveEditChanges);
+    }
+
+    // Delete modal buttons
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    }
+
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', confirmDelete);
+    }
+});
 
 // Initialize the gallery when page loads
 document.addEventListener('DOMContentLoaded', initGallery);

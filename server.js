@@ -15,12 +15,11 @@ app.use(helmet({
       connectSrc: ["'self'", "https://api.cloudinary.com"],
       imgSrc: ["'self'", "https://res.cloudinary.com", "https://images.unsplash.com", "data:", "blob:"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "data:"],
       upgradeInsecureRequests: []
     }
-  },
-  frameguard: false
+  }
 }));
 
 // Enable CORS with specific origin
@@ -38,11 +37,8 @@ app.use(express.json());
 // Set security headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('Surrogate-Control', 'no-store');
   next();
 });
 
@@ -116,10 +112,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-const port = parseInt(process.env.PORT, 10) || 5000;
-const host = '0.0.0.0';
-const server = app.listen(port, host, () => {
-  console.log(`Server started on ${host}:${port}`);
+const port = parseInt(process.env.PORT, 10) || 3000;
+const server = app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
 
 // Graceful shutdown

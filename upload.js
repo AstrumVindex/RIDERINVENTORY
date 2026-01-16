@@ -24,6 +24,18 @@ const themeToggle = document.getElementById('themeToggle');
 function initUploadPage() {
     loadThemePreference();
     setupEventListeners();
+    
+    // Attach Upload Another button listener
+    const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+    if (uploadAnotherBtn) {
+        uploadAnotherBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Upload Another clicked');
+            resetForm();
+        });
+        console.log('Upload Another button listener attached');
+    }
 }
 
 // Setup event listeners
@@ -44,6 +56,18 @@ function setupEventListeners() {
 
     // Theme toggle
     themeToggle.addEventListener('click', toggleTheme);
+
+    // Upload Another button
+    document.addEventListener('DOMContentLoaded', function() {
+        const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+        if (uploadAnotherBtn) {
+            uploadAnotherBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                resetForm();
+            });
+        }
+    });
 
     // Auto-fill name when file is selected
     fileInput.addEventListener('change', function() {
@@ -237,8 +261,14 @@ async function saveImageToGallery(newImage) {
 
 // Show success message
 function showSuccessMessage() {
+    console.log('Showing success message');
     successMessage.style.display = 'block';
     uploadForm.style.display = 'none';
+    
+    // Scroll to success message
+    setTimeout(() => {
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
 }
 
 // Reset form for new upload

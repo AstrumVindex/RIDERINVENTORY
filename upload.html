@@ -117,16 +117,21 @@
                 </form>
 
                 <div class="success-message" id="successMessage">
-                    <div class="success-content">
-                        <i class="fas fa-check-circle"></i>
-                        <h3>Upload Successful!</h3>
+                    <div class="success-box">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>Upload Successful!</h2>
                         <p>Your motorcycle Fitting image has been uploaded to gallery.</p>
-                        <div class="success-actions">
-                            <button class="view-gallery-btn" onclick="window.location.href='index.html'">
-                                <i class="fas fa-images"></i> View in Gallery
-                            </button>
-                            <button class="upload-another-btn" onclick="resetForm()">
-                                <i class="fas fa-plus"></i> Upload Another
+                        
+                        <div class="success-button-group">
+                            <a href="index.html" class="success-btn success-btn-primary">
+                                <i class="fas fa-images"></i>
+                                <span>View in Gallery</span>
+                            </a>
+                            <button class="success-btn success-btn-secondary" id="uploadAnotherBtn">
+                                <i class="fas fa-plus"></i>
+                                <span>Upload Another</span>
                             </button>
                         </div>
                     </div>
