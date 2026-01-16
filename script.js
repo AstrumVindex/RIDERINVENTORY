@@ -46,7 +46,7 @@ const searchInput = document.getElementById('searchInput');
 const categoryFilters = document.getElementById('categoryFilters');
 const themeToggle = document.getElementById('themeToggle');
 const loadingState = document.getElementById('loadingState');
-const adminToggle = document.getElementById('adminToggle');
+const adminToggle = document.getElementById('adminToggle') || null; // Handle missing admin toggle
 
 // Modal Elements
 const modal = document.getElementById('imageModal');
@@ -586,8 +586,10 @@ async function handleImageReplacement(e) {
 
 // Admin Controls Functions
 function initAdminControls() {
-    // Add event listener for admin toggle
-    adminToggle.addEventListener('click', toggleAdminMode);
+    // Add event listener for admin toggle only if it exists
+    if (adminToggle) {
+        adminToggle.addEventListener('click', toggleAdminMode);
+    }
 }
 
 function toggleAdminMode() {
@@ -595,12 +597,20 @@ function toggleAdminMode() {
     const adminControls = document.getElementById('adminControls');
 
     if (adminMode) {
-        adminToggle.classList.add('admin-active');
-        adminControls.style.display = 'block';
+        if (adminToggle) {
+            adminToggle.classList.add('admin-active');
+        }
+        if (adminControls) {
+            adminControls.style.display = 'block';
+        }
         updateAdminStats();
     } else {
-        adminToggle.classList.remove('admin-active');
-        adminControls.style.display = 'none';
+        if (adminToggle) {
+            adminToggle.classList.remove('admin-active');
+        }
+        if (adminControls) {
+            adminControls.style.display = 'none';
+        }
         clearSelection();
     }
 
@@ -887,9 +897,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmDeleteBtn.addEventListener('click', confirmDelete);
     }
 });
-
-// (Debug panel removed) Raw gallery JSON debug panel and automatic updater removed so
-// the gallery JSON will no longer be appended to the page in production.
 
 // Initialize the gallery when page loads
 document.addEventListener('DOMContentLoaded', initGallery);
