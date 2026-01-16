@@ -173,10 +173,10 @@ function renderGallery() {
                     <i class="fas ${isSelected ? 'fa-check' : 'fa-times'}"></i>
                 </button>
             ` : ''}
-            <button class="edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openEditModal(${image.id})">
-                <i class="fas fa-edit"></i>
+            <button class="edit-btn" onclick="event.preventDefault(); event.stopPropagation(); openEditModal(${image.id})" style="z-index: 20;">
+                <i class="fas fa-edit" style="pointer-events: none;"></i>
             </button>
-            <div class="protection-overlay"></div>
+            <div class="protection-overlay" style="z-index: 1;"></div>
             <img src="${image.url}" alt="${image.name}" class="photo-img protected-image" loading="lazy">
             <div class="photo-info">
                 <div class="photo-name">${image.name}</div>
